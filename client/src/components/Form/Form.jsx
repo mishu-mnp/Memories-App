@@ -1,41 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useStyles from './styles';
 import { Paper, TextField, Typography, Button } from '@material-ui/core';
 import FileBase64 from 'react-file-base64'
-import { useDispatch } from 'react-redux'
-import { createPost } from '../../reducers/postsSlice';
+import { useDispatch, useSelector } from 'react-redux'
+import { createPost, updatePost } from '../../reducers/postsSlice';
 
-const Form = () => {
+const Form = ({ currentID, setCurrentID }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [postData, setPostData] = useState({
+    const initialState = {
         creator: '',
         title: '',
         message: '',
         tags: '',
         selectedFile: ''
-    })
+    }
+
+    const [postData, setPostData] = useState(initialState)
 
     const handleOnchange = (e) => {
         setPostData({ ...postData, [e.target.name]: e.target.value })
     }
 
+    const post = useSelector((state) => currentID ? state.posts.posts.find(post => post._id === currentID) : null)
+
+    useEffect(() => {
+        if (post) setPostData(post);
+    }, [post])
+
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log("Post Data", postData)
-        dispatch(createPost(postData))
+        // console.log("Post Data", postData)
+
+        if (currentID) {
+            dispatch(updatePost({ currentID, postData }))
+        } else {
+            dispatch(createPost(postData))
+        }
+
+        clear();
     }
 
 
     const clear = () => {
-
+        setCurrentID(null);
+        setPostData(initialState);
     }
 
     return (
         <Paper className={classes.paper}>
             <form noValidate autoComplete='off' className={`${classes.form} ${classes.root}`} onSubmit={handleSubmit}>
-                <Typography variant='h6'>Creating a Memory</Typography>
+                <Typography variant='h6'>{currentID ? 'Editing' : 'Creating'} a Memory</Typography>
                 <TextField
                     name='creator'
                     label='Creator'

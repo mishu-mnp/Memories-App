@@ -7,11 +7,14 @@ import useStyles from './styles'
 import { useDispatch } from 'react-redux';
 import { addPosts } from "./reducers/postsSlice";
 import * as api from './api'
+import { useState } from "react";
 
 
 const App = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const [currentID, setCurrentID] = useState(null);
 
   const getPosts = async () => {
     await api.fetchPosts().then(res => {
@@ -22,7 +25,8 @@ const App = () => {
 
   useEffect(() => {
     getPosts();
-  }, [])
+    // eslint-disable-next-line
+  }, [currentID])
 
   return (
     <Container maxWidth='lg'>
@@ -35,12 +39,12 @@ const App = () => {
 
       <Grow in>
         <Container>
-          <Grid container justify="space-between" alignItems="stretch" spacing={3}>
+          <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
             <Grid item xs={12} sm={7}>
-              <Posts />
+              <Posts setCurrentID={setCurrentID} currentID={currentID} />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Form />
+              <Form currentID={currentID} setCurrentID={setCurrentID} />
             </Grid>
           </Grid>
         </Container>
