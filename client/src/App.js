@@ -5,28 +5,24 @@ import Form from "./components/Form/Form";
 import Posts from "./components/Posts/Posts";
 import useStyles from './styles'
 import { useDispatch } from 'react-redux';
-import { addPosts } from "./reducers/postsSlice";
-import * as api from './api'
+import { getPosts } from "./reducers/postsSlice";
 import { useState } from "react";
 
 
 const App = () => {
-  const classes = useStyles();
+
   const dispatch = useDispatch();
 
   const [currentID, setCurrentID] = useState(null);
 
-  const getPosts = async () => {
-    await api.fetchPosts().then(res => {
-      dispatch(addPosts(res.data))
-      // console.log('DATA from SERVER >>> ', res.data);
-    }).catch(err => console.log(err.message))
-  }
 
   useEffect(() => {
-    getPosts();
+    dispatch(getPosts())
     // eslint-disable-next-line
-  }, [currentID])
+  }, [currentID, dispatch])
+
+
+  const classes = useStyles();
 
   return (
     <Container maxWidth='lg'>
@@ -39,9 +35,9 @@ const App = () => {
 
       <Grow in>
         <Container>
-          <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
+          <Grid className={classes.mainContainer} container justifyContent="space-between" alignItems="stretch" spacing={3}>
             <Grid item xs={12} sm={7}>
-              <Posts setCurrentID={setCurrentID} currentID={currentID} />
+              <Posts setCurrentID={setCurrentID} />
             </Grid>
             <Grid item xs={12} sm={4}>
               <Form currentID={currentID} setCurrentID={setCurrentID} />

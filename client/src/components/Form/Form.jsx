@@ -20,7 +20,15 @@ const Form = ({ currentID, setCurrentID }) => {
     const [postData, setPostData] = useState(initialState)
 
     const handleOnchange = (e) => {
-        setPostData({ ...postData, [e.target.name]: e.target.value })
+        const name = e.target.name;
+        const value = e.target.value;
+
+        if (name === 'tags') {
+            setPostData({ ...postData, [name]: value.split(',') })
+        }
+        else {
+            setPostData({ ...postData, [name]: value })
+        }
     }
 
     const post = useSelector((state) => currentID ? state.posts.posts.find(post => post._id === currentID) : null)
