@@ -1,51 +1,33 @@
-import React, { useEffect } from "react";
-import { AppBar, Container, Grow, Typography, Grid } from '@material-ui/core'
-import memories from './images/memories.png'
-import Form from "./components/Form/Form";
-import Posts from "./components/Posts/Posts";
+import React from "react";
+import { Container } from '@material-ui/core'
+
 import useStyles from './styles'
-import { useDispatch } from 'react-redux';
-import { getPosts } from "./reducers/postsSlice";
-import { useState } from "react";
+import Navbar from "./components/Navbar/Navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./components/Home/Home";
+import Login from "./components/Login/Login";
 
 
 const App = () => {
 
-  const dispatch = useDispatch();
-
-  const [currentID, setCurrentID] = useState(null);
-
-
-  useEffect(() => {
-    dispatch(getPosts())
-    // eslint-disable-next-line
-  }, [currentID, dispatch])
-
-
   const classes = useStyles();
 
   return (
-    <Container maxWidth='lg'>
-      <AppBar className={classes.appBar} position="static" color='inherit' >
-        <Typography className={classes.heading} variant='h2' align="center">
-          Memories
-        </Typography>
-        <img className={classes.image} src={memories} alt='memories' height="60" />
-      </AppBar>
-
-      <Grow in>
-        <Container>
-          <Grid className={classes.mainContainer} container justifyContent="space-between" alignItems="stretch" spacing={3}>
-            <Grid item xs={12} sm={7}>
-              <Posts setCurrentID={setCurrentID} />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Form currentID={currentID} setCurrentID={setCurrentID} />
-            </Grid>
-          </Grid>
-        </Container>
-      </Grow>
-    </Container>
+    <Router>
+      <Container maxWidth='lg'>
+        <Navbar />
+        <Routes>
+          <Route
+            path="/"
+            element={<Home />}
+          />
+          <Route
+            path='/login'
+            element={<Login />}
+          />
+        </Routes>
+      </Container>
+    </Router>
   );
 }
 
