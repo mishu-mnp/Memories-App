@@ -1,7 +1,6 @@
 import React from "react";
 import { Container } from '@material-ui/core'
-
-import useStyles from './styles'
+// import useStyles from './styles'
 import Navbar from "./components/Navbar/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
@@ -10,7 +9,7 @@ import Login from "./components/Login/Login";
 
 const App = () => {
 
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <Router>
