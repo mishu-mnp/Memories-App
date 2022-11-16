@@ -1,13 +1,22 @@
 import { Avatar, Button, Container, Typography, Paper, Grid } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from './Input';
 import useStyles from './styles';
+import { GoogleLogin } from 'react-google-login';
+import { gapi } from 'gapi-script';
+import Icon from './icon';
+import { useDispatch } from 'react-redux'
+import { addProfile } from '../../reducers/authSlice';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Auth = () => {
 
     const classes = useStyles();
 
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
 
     const handleOnchange = (e) => {
 
@@ -27,6 +36,39 @@ const Login = () => {
     const switchMode = () => {
         setIsSignup((prev) => !prev);
     }
+
+
+    // Google Sign In
+    const googleSuccess = (res) => {
+        console.log('Success: ', res);
+        const result = res?.profileObj;
+        const token = res?.tokenId;
+
+        try {
+            dispatch(addProfile({ result, token }));
+            navigate('/')
+        } catch (error) {
+            console.log('Err : ', error)
+        }
+    }
+
+    const googleFailure = (error) => {
+        console.log('Error : ', error);
+    }
+
+
+    const clientID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    console.log('CLIENT ID >>> ', clientID)
+
+    useEffect(() => {
+        const initClient = () => {
+            gapi.client.init({
+                clientId: clientID,
+                scope: ''
+            });
+        };
+        gapi.load('client:auth2', initClient);
+    });
 
     return (
         <Container component='main' maxWidth="xs">
@@ -83,6 +125,25 @@ const Login = () => {
                     <Button type='submit' className={classes.submit} variant='contained' color='primary' fullWidth>
                         {isSignup ? 'Login' : 'Sign Up'}
                     </Button>
+                    <GoogleLogin
+                        clientId={clientID}
+                        render={(renderProps) => (
+                            <Button
+                                className={classes.googleButton}
+                                color='primary'
+                                fullWidth
+                                onClick={renderProps.onClick}
+                                disabled={renderProps.disabled}
+                                startIcon={<Icon />}
+                                variant='contained'>
+                                Google Sign in
+                            </Button>
+                        )}
+                        onSuccess={googleSuccess}
+                        onFailure={googleFailure}
+                        cookiePolicy='single_host_origin'
+                    // isSignedIn={true}
+                    />
                     <Grid container justifyContent='flex-end'>
                         <Button onClick={switchMode}>
                             {isSignup ? 'Already have an account? Sign In' : 'New User? Create Account'}
@@ -94,4 +155,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Auth
