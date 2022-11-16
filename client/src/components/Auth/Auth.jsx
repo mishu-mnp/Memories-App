@@ -18,13 +18,23 @@ const Auth = () => {
 
     const navigate = useNavigate();
 
-    const handleOnchange = (e) => {
+    const initialState = {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    }
 
+    const [userData, setUserData] = useState(initialState)
+
+    const handleOnchange = (e) => {
+        setUserData({ ...userData, [e.target.name]: e.target.value });
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        console.log('User Data >>> ', userData);
     }
 
     const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +45,7 @@ const Auth = () => {
     const [isSignup, setIsSignup] = useState(true);
     const switchMode = () => {
         setIsSignup((prev) => !prev);
+        setUserData(initialState);
     }
 
 
@@ -58,7 +69,7 @@ const Auth = () => {
 
 
     const clientID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    console.log('CLIENT ID >>> ', clientID)
+    // console.log('CLIENT ID >>> ', clientID)
 
     useEffect(() => {
         const initClient = () => {
@@ -85,14 +96,16 @@ const Auth = () => {
                                     <Input
                                         name='firstName'
                                         label='First Name'
-                                        onChange={handleOnchange}
+                                        value={userData.firstName}
+                                        handleOnchange={handleOnchange}
                                         autoFocus
                                         half
                                     />
                                     <Input
                                         name='lastName'
                                         label='Last Name'
-                                        onChange={handleOnchange}
+                                        value={userData.lastName}
+                                        handleOnchange={handleOnchange}
                                         half
                                     />
                                 </>
@@ -101,6 +114,7 @@ const Auth = () => {
                         <Input
                             name='email'
                             label='Email'
+                            value={userData.email}
                             handleOnchange={handleOnchange}
                             type='email'
                         />
@@ -108,6 +122,7 @@ const Auth = () => {
                         <Input
                             name='password'
                             label='Password'
+                            value={userData.password}
                             handleOnchange={handleOnchange}
                             type={showPassword ? 'text' : 'password'}
                             handleShowPassword={handleShowPassword}
@@ -117,6 +132,7 @@ const Auth = () => {
                             <Input
                                 name='confirmPassword'
                                 label='Confirm Password'
+                                value={userData.confirmPassword}
                                 handleOnchange={handleOnchange}
                                 type={showPassword ? 'text' : 'password'}
                             />

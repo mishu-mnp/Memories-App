@@ -2,12 +2,13 @@ import { Grid, IconButton, InputAdornment, TextField } from '@material-ui/core'
 import { Visibility, VisibilityOff } from '@material-ui/icons'
 import React from 'react'
 
-const Input = ({ name, handleOnchange, label, autoFocus, type, half, handleShowPassword }) => {
+const Input = ({ name, handleOnchange, label, value, autoFocus, type, half, handleShowPassword }) => {
     return (
         <Grid item xs={12} sm={half ? 6 : 12} >
             <TextField
                 name={name}
                 onChange={handleOnchange}
+                value={value}
                 variant='outlined'
                 required
                 fullWidth
