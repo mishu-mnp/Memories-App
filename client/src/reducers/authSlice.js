@@ -11,7 +11,7 @@ const authSlice = createSlice({
         addProfile: (state, action) => {
             state.profile = action.payload;
             localStorage.setItem('profile', JSON.stringify({ ...action.payload }))
-            console.log('Profile Data >>> ', action.payload);
+            // console.log('Profile Data >>> ', action.payload);
         },
         removeProfile: (state, action) => {
             localStorage.clear();
@@ -20,9 +20,11 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(signin.fulfilled, (state, action) => {
-            console.log(action.payload)
+            localStorage.setItem('profile', JSON.stringify({ ...action.payload }))
+            // console.log('Profile Data >>> ', action.payload)
         }).addCase(signup.fulfilled, (state, action) => {
-            console.log(action.payload)
+            localStorage.setItem('profile', JSON.stringify({ ...action.payload }))
+            // console.log('Profile Data >>> ', action.payload)
         })
     }
 })

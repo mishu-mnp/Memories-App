@@ -9,6 +9,7 @@ import Icon from './icon';
 import { useDispatch } from 'react-redux'
 import { addProfile } from '../../reducers/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { signup, signin } from '../../reducers/authSlice';
 
 const Auth = () => {
 
@@ -17,6 +18,9 @@ const Auth = () => {
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
+
+    const [isSignup, setIsSignup] = useState(true);
+
 
     const initialState = {
         firstName: '',
@@ -34,7 +38,13 @@ const Auth = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('User Data >>> ', userData);
+        // console.log('User Data >>> ', userData);
+
+        if (isSignup) {
+            dispatch(signup(userData, navigate))
+        } else {
+            dispatch(signin(userData, navigate))
+        }
     }
 
     const [showPassword, setShowPassword] = useState(false);
@@ -42,16 +52,16 @@ const Auth = () => {
         setShowPassword((prev) => !prev);
     }
 
-    const [isSignup, setIsSignup] = useState(true);
     const switchMode = () => {
         setIsSignup((prev) => !prev);
+        setShowPassword(false);
         setUserData(initialState);
     }
 
 
     // Google Sign In
     const googleSuccess = (res) => {
-        console.log('Success: ', res);
+        // console.log('Success: ', res);
         const result = res?.profileObj;
         const token = res?.tokenId;
 
@@ -80,6 +90,8 @@ const Auth = () => {
         };
         gapi.load('client:auth2', initClient);
     });
+
+    // console.log('IS Signup >>> ', isSignup);
 
     return (
         <Container component='main' maxWidth="xs">
@@ -139,7 +151,7 @@ const Auth = () => {
                         }
                     </Grid>
                     <Button type='submit' className={classes.submit} variant='contained' color='primary' fullWidth>
-                        {isSignup ? 'Login' : 'Sign Up'}
+                        {isSignup ? 'Sign Up' : 'Login'}
                     </Button>
                     <GoogleLogin
                         clientId={clientID}

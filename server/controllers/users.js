@@ -2,6 +2,8 @@ import User from "../models/user.js";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+const secretKey = process.env.SECRET_KEY || 'user19tk47';
+// console.log('SECRET KEY >>> ', secretKey)
 
 export const signin = async (req, res) => {
     const { email, password } = req.body;
@@ -14,7 +16,7 @@ export const signin = async (req, res) => {
 
         if (!isPasswordCorrect) return res.status(400).json({ message: 'Check your Credentials!' })
 
-        const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, process.env.SECRET_KEY, { expiresIn: '6h' });
+        const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, 'user19tk47', { expiresIn: '6h' });
 
         return res.status(200).json({ result: existingUser, token: token });
 
@@ -25,22 +27,25 @@ export const signin = async (req, res) => {
 
 export const signup = async (req, res) => {
     const { firstName, lastName, email, password, confirmPassword } = req.body;
+    // console.log('BODY DATA >>> ', req.body);
 
     try {
         const existingUser = await User.findOne({ email });
-
+        // console.log('Existing >>> ', existingUser);
         if (existingUser) return res.status(400).json({ message: 'User Already Exists!' });
 
         if (password !== confirmPassword) return res.status(400).json({ message: "Passowrd doesn't matches" });
 
         const hashedPassword = await bcrypt.hash(password, 12);
+        // console.log('HASHED PWD >>> ', hashedPassword);
 
         const result = await User.create({ email, password: hashedPassword, name: `${firstName} ${lastName}` });
-        const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, process.env.SECRET_KEY, { expiresIn: '6h' });
+        // console.log('RESULT >>> ', result);
+        const token = jwt.sign({ email: result.email, id: result._id }, 'user19tk47', { expiresIn: '6h' });
 
         res.status(200).json({ result, token });
     } catch (error) {
-        res.status(400).json({ message: error });
+        res.status(401).json({ message: error });
     }
 }
 
