@@ -9,8 +9,9 @@ const Form = ({ currentID, setCurrentID }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    let user = JSON.parse(localStorage.getItem('profile'));
+    console.log('Who >> ', user);
     const initialState = {
-        creator: '',
         title: '',
         message: '',
         tags: '',
@@ -42,9 +43,9 @@ const Form = ({ currentID, setCurrentID }) => {
         // console.log("Post Data", postData)
 
         if (currentID) {
-            dispatch(updatePost({ currentID, postData }))
+            dispatch(updatePost({ ...postData, name: user?.result?.name, currentID }))
         } else {
-            dispatch(createPost(postData))
+            dispatch(createPost({ ...postData, name: user?.result?.name }))
         }
 
         clear();
@@ -56,18 +57,21 @@ const Form = ({ currentID, setCurrentID }) => {
         setPostData(initialState);
     }
 
+
+    if (!user?.result?.name) {
+        return (
+            <Paper className={classes.paper}>
+                <Typography variant='h6' align='center'>
+                    Please Sign in to create memories
+                </Typography>
+            </Paper>
+        )
+    }
+
     return (
         <Paper className={classes.paper}>
             <form noValidate autoComplete='off' className={`${classes.form} ${classes.root}`} onSubmit={handleSubmit}>
                 <Typography variant='h6'>{currentID ? 'Editing' : 'Creating'} a Memory</Typography>
-                <TextField
-                    name='creator'
-                    label='Creator'
-                    fullWidth
-                    variant='outlined'
-                    value={postData.creator}
-                    onChange={handleOnchange}
-                />
                 <TextField
                     name='title'
                     label='Title'

@@ -23,10 +23,11 @@ export const createPost = createAsyncThunk('posts/create', async (post) => {
 
 export const updatePost = createAsyncThunk('post/update', async (data) => {
     const { currentID, postData } = data;
+    console.log("DATA !!!", data)
     console.log("ID ", currentID)
-    console.log("POST ", postData)
+    // console.log("POST ", postData)
     try {
-        const res = await api.updatePost(currentID, postData);
+        const res = await api.updatePost(currentID, data);
         return res.data;
     } catch (error) {
         return error.response.data;

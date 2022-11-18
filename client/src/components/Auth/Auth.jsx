@@ -42,6 +42,7 @@ const Auth = () => {
 
         if (isSignup) {
             dispatch(signup(userData, navigate))
+            navigate('/');
         } else {
             dispatch(signin(userData, navigate))
         }
