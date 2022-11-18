@@ -19,7 +19,7 @@ const Auth = () => {
 
     const navigate = useNavigate();
 
-    const [isSignup, setIsSignup] = useState(true);
+    const [isSignup, setIsSignup] = useState(false);
 
 
     const initialState = {

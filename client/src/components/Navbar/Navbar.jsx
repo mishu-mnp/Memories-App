@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { removeProfile } from '../../reducers/authSlice';
+import { decode } from 'jsonwebtoken';
 
 const Navbar = () => {
     const classes = useStyles();
@@ -24,6 +25,13 @@ const Navbar = () => {
 
     useEffect(() => {
         const token = user?.token;
+
+        if (token) {
+            const decodedToken = decode(token);
+
+            if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+        }
+
         setUser(JSON.parse(localStorage.getItem('profile')))
     }, [location])
 
