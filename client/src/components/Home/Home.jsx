@@ -1,10 +1,12 @@
-import { Container, Grid, Grow } from '@material-ui/core'
+import { Container, Grid, Grow, Paper, AppBar, TextField, Button } from '@material-ui/core'
 import React, { useState, useEffect } from 'react'
 import { getPosts } from "../../reducers/postsSlice";
 import Form from "../Form/Form"
 import Posts from "../Posts/Posts";
 import { useDispatch } from 'react-redux';
 import useStyles from '../../styles';
+import Pagination from '../Pagination/Pagination';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -27,6 +29,9 @@ const Home = () => {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <Form currentID={currentID} setCurrentID={setCurrentID} />
+                        <Paper elevation={6}>
+                            <Pagination />
+                        </Paper>
                     </Grid>
                 </Grid>
             </Container>
