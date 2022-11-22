@@ -12,7 +12,8 @@ import PostDetails from "./components/PostDetails/PostDetails";
 const App = () => {
 
   // const classes = useStyles();
-  const user = localStorage.getItem('profile')
+  const user = JSON.parse(localStorage.getItem('profile'));
+  console.log('USER >>> ', user)
   return (
     <Router>
       <Container maxWidth='xl'>

@@ -14,11 +14,11 @@ API.interceptors.request.use((req) => {
 
 // Posts Requests
 export const fetchPosts = async () => await API.get('/posts');
+export const fetchPostsBySearch = async (searchQuery) => await API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`)
 export const createPost = async (post) => await API.post('/posts', post);
 export const updatePost = async (id, updatedPost) => await API.patch(`/posts/${id}`, updatedPost);
 export const deletePost = async (id) => await API.delete(`/posts/${id}`);
 export const likePost = async (id) => await API.patch(`/posts/${id}/likePost`);
-
 
 // Authenticate Requests
 export const signin = async (formData) => await API.post('/user/signin', formData);

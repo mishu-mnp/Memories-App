@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getPosts, createPost, updatePost, deletePost, likePost } from '../actions/posts';
+import { getPosts, createPost, updatePost, deletePost, likePost, getPostsBySearch } from '../actions/posts';
 
 
 const postsSlice = createSlice({
@@ -18,11 +18,14 @@ const postsSlice = createSlice({
             state.posts = action.payload;
         }).addCase(getPosts.rejected, (state, action) => {
             state.loading = true;
+        }).addCase(getPostsBySearch.fulfilled, (state, action) => {
+            // console.log('SEARCH DATA All Posts >>> ', action.payload)
+            state.posts = action.payload;
         }).addCase(createPost.fulfilled, (state, action) => {
-            console.log("CReated Data after >>> ", action.payload)
+            // console.log("CReated Data after >>> ", action.payload)
             state.posts = [...state.posts, action.payload]
         }).addCase(updatePost.fulfilled, (state, action) => {
-            console.log("UpDATed Data after >>> ", action.payload)
+            // console.log("UpDATed Data after >>> ", action.payload)
             state.posts = state.posts.map((post) => (post._id === action.payload._id ? action.payload : post));
         }).addCase(deletePost.fulfilled, (state, action) => {
             state.posts = state.posts.filter(post => post._id !== action.payload.id)
