@@ -6,7 +6,9 @@ const postsSlice = createSlice({
     name: 'posts',
     initialState: {
         loading: false,
-        posts: []
+        posts: [],
+        numberOfPages: 0,
+        currentPage: 1
     },
     reducers: {
         // no reducers
@@ -15,12 +17,16 @@ const postsSlice = createSlice({
         builder.addCase(getPosts.pending, (state, action) => {
             state.loading = true;
         }).addCase(getPosts.fulfilled, (state, action) => {
-            state.posts = action.payload;
+            state.posts = action.payload.data;
+            state.currentPage = action.payload.currentPage
+            state.numberOfPages = action.payload.numberOfPages
         }).addCase(getPosts.rejected, (state, action) => {
             state.loading = true;
         }).addCase(getPostsBySearch.fulfilled, (state, action) => {
             // console.log('SEARCH DATA All Posts >>> ', action.payload)
             state.posts = action.payload;
+            state.currentPage = action.payload.currentPage
+            state.numberOfPages = action.payload.numberOfPages
         }).addCase(createPost.fulfilled, (state, action) => {
             // console.log("CReated Data after >>> ", action.payload)
             state.posts = [...state.posts, action.payload]

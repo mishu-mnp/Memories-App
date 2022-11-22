@@ -38,11 +38,6 @@ const Home = () => {
     }
 
 
-    useEffect(() => {
-        dispatch(getPosts())
-        // eslint-disable-next-line
-    }, [currentID, dispatch])
-
     const classes = useStyles();
 
     const searchPost = () => {
@@ -96,7 +91,7 @@ const Home = () => {
                         </AppBar>
                         <Form currentID={currentID} setCurrentID={setCurrentID} />
                         <Paper elevation={6}>
-                            <Pagination />
+                            <Pagination page={page} />
                         </Paper>
                     </Grid>
                 </Grid>
