@@ -14,6 +14,7 @@ API.interceptors.request.use((req) => {
 
 // Posts Requests
 export const fetchPosts = async (page) => await API.get(`/posts?page=${page}`);
+export const fetchPost = async (id) => await API.get(`/posts/${id}`);
 export const fetchPostsBySearch = async (searchQuery) => await API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`)
 export const createPost = async (post) => await API.post('/posts', post);
 export const updatePost = async (id, updatedPost) => await API.patch(`/posts/${id}`, updatedPost);

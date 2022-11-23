@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getPosts, createPost, updatePost, deletePost, likePost, getPostsBySearch } from '../actions/posts';
+import { getPosts, getPost, createPost, updatePost, deletePost, likePost, getPostsBySearch } from '../actions/posts';
 
 
 const postsSlice = createSlice({
@@ -7,6 +7,7 @@ const postsSlice = createSlice({
     initialState: {
         loading: true,
         posts: [],
+        post: {},
         numberOfPages: 0,
         currentPage: 1
     },
@@ -17,13 +18,19 @@ const postsSlice = createSlice({
         builder.addCase(getPosts.pending, (state, action) => {
             state.loading = true;
         }).addCase(getPosts.fulfilled, (state, action) => {
-            state.loading = true;
+            // state.loading = true;
             state.posts = action.payload.data;
             state.currentPage = action.payload.currentPage
             state.numberOfPages = action.payload.numberOfPages
             state.loading = false;
         }).addCase(getPosts.rejected, (state, action) => {
             state.loading = true;
+        }).addCase(getPost.pending, (state, action) => {
+            state.loading = true;
+        }).addCase(getPost.fulfilled, (state, action) => {
+            console.log('SINGLE POST >>> ', action.payload)
+            state.post = action.payload;
+            state.loading = false;
         }).addCase(getPostsBySearch.fulfilled, (state, action) => {
             // console.log('SEARCH DATA All Posts >>> ', action.payload)
             state.loading = true;
