@@ -69,7 +69,7 @@ const Form = ({ currentID, setCurrentID }) => {
     }
 
     return (
-        <Paper className={classes.paper}>
+        <Paper className={classes.paper} elevation={6}>
             <form noValidate autoComplete='off' className={`${classes.form} ${classes.root}`} onSubmit={handleSubmit}>
                 <Typography variant='h6'>{currentID ? 'Editing' : 'Creating'} a Memory</Typography>
                 <TextField
