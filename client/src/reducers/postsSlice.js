@@ -29,6 +29,7 @@ const postsSlice = createSlice({
             state.loading = true;
         }).addCase(getPost.fulfilled, (state, action) => {
             console.log('SINGLE POST >>> ', action.payload)
+            state.loading = true;
             state.post = action.payload;
             state.loading = false;
         }).addCase(getPostsBySearch.fulfilled, (state, action) => {

@@ -33,8 +33,10 @@ export const getPostsBySearch = createAsyncThunk('posts/getBySearch', async (sea
 })
 
 export const createPost = createAsyncThunk('posts/create', async (post) => {
+    console.log('CREATING ARGS >>> ', post)
     try {
         const res = await api.createPost(post);
+        // navigate(`/posts/${res.data._id}`)
         return res.data;
     } catch (error) {
         return error.response.data;

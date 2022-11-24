@@ -4,6 +4,7 @@ import { Paper, TextField, Typography, Button } from '@material-ui/core';
 import FileBase64 from 'react-file-base64'
 import { useDispatch, useSelector } from 'react-redux'
 import { createPost, updatePost } from '../../reducers/postsSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Form = ({ currentID, setCurrentID }) => {
     const classes = useStyles();
@@ -33,6 +34,7 @@ const Form = ({ currentID, setCurrentID }) => {
     }
 
     const post = useSelector((state) => currentID ? state.posts.posts.find(post => post._id === currentID) : null)
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (post) setPostData(post);
@@ -45,7 +47,7 @@ const Form = ({ currentID, setCurrentID }) => {
         if (currentID) {
             dispatch(updatePost({ ...postData, name: user?.result?.name, currentID }))
         } else {
-            dispatch(createPost({ ...postData, name: user?.result?.name }))
+            dispatch(createPost(({ ...postData, name: user?.result?.name }, navigate)))
         }
 
         clear();
